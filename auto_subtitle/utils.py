@@ -38,8 +38,8 @@ def write_srt(transcript: Iterator[dict], file: TextIO):
         current_text += segment['text'].strip().replace('-->', '->')
         start = segment['start'] if start==None else start
         end = segment['end']
-        if current_text.endswith((".","?","!")):
-            #句末
+        if current_text.endswith((".","?","!")) or segment==transcript[-1]:
+            # end of sentence or end of video
             print(
                 f"{idx}\n"
                 f"{format_timestamp(start, always_include_hours=True)} --> " 
@@ -50,16 +50,6 @@ def write_srt(transcript: Iterator[dict], file: TextIO):
             )
             idx += 1
             current_text, start, end = "", None, None
-        elif segment==transcript[-1]:
-            #文末
-            print(
-                f"{idx}\n"
-                f"{format_timestamp(start, always_include_hours=True)} --> " 
-                f"{format_timestamp(end, always_include_hours=True)}\n" 
-                f"{current_text}\n",
-                file=file,
-                flush=True,
-            )
 
 def filename(path):
     return os.path.splitext(os.path.basename(path))[0]
