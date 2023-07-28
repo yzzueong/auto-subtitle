@@ -80,7 +80,7 @@ def get_audio(paths):
 
         ffmpeg.input(path).output(
             output_path,
-            acodec="pcm_s16le", ac=1, ar="16k"
+            acodec="pcm_s16le", ac=1, ar=10000,r=15
         ).run(quiet=True, overwrite_output=True)
 
         audio_paths[path] = output_path
