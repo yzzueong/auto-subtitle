@@ -29,7 +29,7 @@ def format_timestamp(seconds: float, always_include_hours: bool = False):
     hours_marker = f"{hours}:" if always_include_hours or hours > 0 else ""
     return f"{hours_marker}{minutes:02d}:{seconds:02d}.{milliseconds:03d}"
 
-
+# Use dynamic programming to ensure that each line is a complete sentence
 def write_srt(transcript: Iterator[dict], file: TextIO):
     for i, segment in enumerate(transcript, start=1):
         print(
