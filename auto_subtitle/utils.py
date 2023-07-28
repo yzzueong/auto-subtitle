@@ -31,16 +31,25 @@ def format_timestamp(seconds: float, always_include_hours: bool = False):
 
 # ensure each line is a complete sentence
 def write_srt(transcript: Iterator[dict], file: TextIO):
-    for i, segment in enumerate(transcript, start=1):
-        print(
-            f"{i}\n"
-            f"{format_timestamp(segment['start'], always_include_hours=True)} --> "
-            f"{format_timestamp(segment['end'], always_include_hours=True)}\n"
-            f"{segment['text'].strip().replace('-->', '->')}\n",
-            file=file,
-            flush=True,
-        )
-
+    idx = 1
+    current_text = ""
+    start, end = None, None
+    for segment in transcript:
+        current_text += segment['text'].strip().replace('-->', '->')
+        start = segment['start'] if start==None else start
+        end = segment['end']
+        if current_text.endswith((".","?","!")):
+            #句末
+            print(
+                f"{idx}\n"
+                f"{format_timestamp(start, always_include_hours=True)} --> " 
+                f"{format_timestamp(end, always_include_hours=True)}\n" 
+                f"{current_text}\n",
+                file=file,
+                flush=True,
+            )
+            idx += 1
+            current_text, start, end = "", None, None
 
 def filename(path):
     return os.path.splitext(os.path.basename(path))[0]
