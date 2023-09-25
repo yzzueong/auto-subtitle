@@ -35,7 +35,8 @@ def write_srt(transcript: Iterator[dict], file: TextIO):
     current_text = ""
     start, end = None, None
     for segment in transcript:
-        current_text += segment['text'].strip().replace('-->', '->')
+        tt = segment['text'].strip().replace('-->', '->')
+        current_text += tt if current_text.endswith(" ") else " "+tt
         start = segment['start'] if start==None else start
         end = segment['end']
         if current_text.endswith((".","?","!")) or segment==transcript[-1]:
